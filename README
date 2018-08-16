@@ -1,0 +1,44 @@
+编译:
+    module load x86/netcdf/4.6.1-with-parallel
+	module load x86/Intel_Development_Tool/2017
+
+	./mpi.sh resultcheck.c
+    注：编译时加入 -DPOP_Balance 可以用14个进程合并pop
+    
+运行:
+    bsub -I -q q_x86_expr -n 12 ./test ncinfiles ncoutfile 
+
+	例如
+    bsub -I -q q_x86_expr -n 12 ./test  ../../testdata/pop/test01_G_T62_t12.pop.r.0001-02-01-00000.nc test01_G_T62_t12.pop.r.0001-02-01-00000.nc
+
+	注：提交时独占的节点数多时，合并时间会大大减少，比如，用12进程合并，可以设置参数
+	    (1) -n 12       作业随机分配12个空闲的核心
+		(2)-N 3 -np 4  用3个节点，每个节点4个进程
+		(3)-N 12 -np 1 用12个节点，每个节点1个进程
+		如果有计算资源，(3)是最快的
+说明：
+    需要netdf4.6.1-with-parallel 支持
+    根据变量的个数设置适当的进程数目
+	可执行文件后需两个参数，第一个参数为碎片文件所在目录及共用的文件名字符串,第二个结果文件
+	例如：
+		../../testdata/ocean
+		├── ocean_month.nc
+		├── ocean_month.nc.0000
+		├── ocean_month.nc.0001
+		├── ocean_month.nc.0002
+		├── ocean_month.nc.0003
+		├── ocean_month.nc.0004
+		├── ocean_month.nc.0005
+		├── ocean_month.nc.0006
+		├── ocean_month.nc.0007
+		├── ocean_month.nc.0008
+		├── ocean_month.nc.0009
+		├── ocean_month.nc.0010
+		├── ocean_month.nc.0011
+		├── ocean_month.nc.0012
+		├── ocean_month.nc.0013
+		└── ocean_month.nc.0014
+
+	  则第一个参数为 ../../testdata/ocean/ocean_month.nc
+
+	
