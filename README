@@ -3,7 +3,7 @@
 	module load x86/Intel_Development_Tool/2017
 
 	./mpi.sh resultcheck.c
-    注：编译时加入 -DPOP_Balance 可以用14个进程合并pop
+    注：编译时加入 -DPOP_Balance 可以用14个进程合并pop(POP负载均衡)
     
 运行:
     bsub -I -q q_x86_expr -n 12 ./test ncinfiles ncoutfile 

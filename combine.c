@@ -82,7 +82,7 @@ int main(int argc, char **argv)
             varsize*=ncoutfile->dimfullsize[ncoutfile->vardim[varid][k]];
 		}
 
-		nc_var_par_access(ncidall, varid, 1);
+		nc_var_par_access(ncidall, varid, 0);
 
 		switch (ncoutfile->datatype[varid]) { 
 			case NC_BYTE:
@@ -174,31 +174,42 @@ int main(int argc, char **argv)
         switch (ncoutfile->datatype[varid]) { 
             case NC_BYTE:
             case NC_CHAR:
+				nc_sync(ncidall);
 				XXnc(nc_put_var_text(ncoutfile->ncfid, ncoutfile->varid[varid], alldatac));
+				nc_sync(ncidall);
 				free(alldatac);
                 break;
 		    case NC_SHORT:
+				nc_sync(ncidall);
 				XXnc(nc_put_var_short(ncoutfile->ncfid, ncoutfile->varid[varid], alldatas));
+				nc_sync(ncidall);
 				free(alldatas);
                 break;
 		    case NC_INT:
+				nc_sync(ncidall);
 				XXnc(nc_put_var_int(ncoutfile->ncfid, ncoutfile->varid[varid], alldatai));
+				nc_sync(ncidall);
 				free(alldatai);
                 break;
 		    case NC_FLOAT:
+				nc_sync(ncidall);
 				XXnc(nc_put_var_float(ncoutfile->ncfid, ncoutfile->varid[varid], alldataf));
+				nc_sync(ncidall);
 				free(alldataf);
                 break;
 		    case NC_DOUBLE:
+				nc_sync(ncidall);
 				XXnc(nc_put_var_double(ncoutfile->ncfid, ncoutfile->varid[varid], alldatad));
+				nc_sync(ncidall);
 				free(alldatad);
                 break;
 		}
 	}
 
+	MPI_Barrier(MPI_COMM_WORLD);
+
 	nc_close(ncidall);
 
-	MPI_Barrier(MPI_COMM_WORLD);
 	t2 = MPI_Wtime();
 
 	if(rank == size - 1)
