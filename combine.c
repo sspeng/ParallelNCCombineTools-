@@ -27,6 +27,9 @@ int main(int argc, char **argv)
 
 	int ncidall;
 	nc_create_par(argv[2], NC_CLOBBER | NC_PNETCDF | NC_64BIT_OFFSET, MPI_COMM_WORLD, MPI_INFO_NULL, &ncidall);
+	
+	MPI_Barrier(MPI_COMM_WORLD);
+	nc_sync(ncidall);
 
 	nc_set_fill(ncidall, NC_NOFILL, NULL);
 
@@ -208,6 +211,7 @@ int main(int argc, char **argv)
 
 	MPI_Barrier(MPI_COMM_WORLD);
 
+	nc_sync(ncidall);
 	nc_close(ncidall);
 
 	t2 = MPI_Wtime();
