@@ -1,0 +1,14 @@
+Verify if the merged data is correct.
+For example:
+    module load x86/netcdf/4.6.1-with-parallel
+	module load x86/Intel_Development_Tool/2017
+
+	./mpi.sh resultcheck.c
+	./run.sh
+
+run.sh:
+    bsub -I -q q_x86_expr -n 12 ./test  correctresult/test01_G_T62_t12.pop.r.0001-02-01-00000.nc test01_G_T62_t12.pop.r.0001-02-01-00000.nc 
+
+	说明：需要netdf4.6.1-with-parallel 支持
+	      根据变量的个数设置适当的进程数目
+		  可执行文件后需两个参数，第一个参数为正确的结果文件，第二个为待校验的结果文件
